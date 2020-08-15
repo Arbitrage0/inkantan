@@ -1,0 +1,5 @@
+Flask>=1.1.2
+beautifulsoup4>=4.9.1
+cryptography>=3.0
+endesive>=1.5.11
+PyMuPDF>=1.17.5
