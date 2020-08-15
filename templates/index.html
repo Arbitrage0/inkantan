@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💮</text></svg>">
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+      body {
+        padding-top: 2rem;
+      }
+      .starter-template {
+        padding: 3rem 1.5rem;
+        text-align: center;
+      }
+    </style>
+    <title>inkantan - Your Digital 認め印 for PDFs</title>
+  </head>
+  <body>
+
+<main role="main" class="container">
+  <a rel="license" href="https://creativecommons.org/share-your-work/public-domain/cc0/"><img class="bottomElement" alt="Creative Commons - Public Domain" style="border-width:0" src="https://licensebuttons.net/p/zero/1.0/88x15.png" /></a>
+  <div class="starter-template">
+    <h1><u>in</u><span style="text-decoration: overline"><u>kan</u>tan</span>: Your Digital 認め印</h1><br />
+    <p class="lead">A simple, lite Flask web app to sign your PDF contracts by applying a custom-generated Hanko (seal).<br>Free to use. No data retained. Self-signed certificates. Viewable on Adobe® Reader signature panel.</p>
+    <img src="{{ url_for('static', filename='assets/seal.png') }}" width="200"></img>
+    <br /><br />
+    <p>*Yes, I know this is not a mitome-in.<br>Built with Python, special props to <a href="https://www.hankogenerator.com/">HankoGenerator</a>.</p><!--<br><br>Support me by buying me a 奶茶🍵 (BTC: 1CD3LVXQvysJ1eP16DinFXEfuctmnjizYh)! <br>Check out the Github repo for how it works, and a (brief!) discussion on the law of digital signatures.-->
+    <a href="https://twitter.com/quantequivocal/" class="btn btn-tw btn-light"><i class="fa fa-twitter pr-1"></i> Twitter</a>
+    <a href="https://github.com/Arbitrage0" class="btn btn-tw btn-light"><i class="fa fa-github pr-1"></i> Github</a>
+    <br /><br />
+    <a href="#forma"><button id="start" style="width: 100px;" class="btn btn-tw btn-secondary">Begin</button></a>
+    <br /><br/><hr/>
+  </div>
+  <div id="forma" style="display:none">
+    <h3>Upload and Sign:</h3>
+    <br>
+    <form id="formdata" enctype="multipart/form-data" method="POST" action="/sign">
+      <div class="form-group">
+        <input type="hidden" id="region" name="region">
+        <input type="hidden" id="x1" name="x1">
+        <input type="hidden" id="x2" name="x2">
+        <input type="hidden" id="y1" name="y1">
+        <input type="hidden" id="y2" name="y2">
+        <div class="form-group row">
+          <label for="name" class="col-form-label col-sm-4">Name (Kanji/Hiragana/Katakana only): </label>
+          <input type="text" class="form-control col-sm-2" id="name" name="name" placeholder="宮崎駿" required>
+        </div>
+        <div class="form-group row">
+          <label for="email" class="col-form-label col-sm-4">Email (for certificate details): </label>
+          <input type="email" class="form-control col-sm-2" id="email" name="email" placeholder="user@example.com" required>
+        </div>
+        <div class="form-group row">
+          <p class="col-form-label col-sm-4">Hanko Purpose/Shape: </p>
+          <div class="form-check form-check-inline">
+            <input type="radio" class="form-check-input" id="pround" value="round" name="shape" checked>
+            <label for="round" class="form-check-label">Personal Use / Round</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input type="radio" class="form-check-input" id="cround" value="round" name="shape">
+            <label for="cround" class="form-check-label">Corporate Use / Round</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input type="radio" class="form-check-input" id="csquare" value="square" name="shape">
+            <label for="csquare" class="form-check-label">Corporate Use / Square</label>
+          </div>
+        </div>
+        <div class="form-group row">
+          <p class="col-form-label col-sm-4">Text Layout Style: </p>
+          <div class="form-check form-check-inline">
+            <input type="radio" class="form-check-input" id="vs" value="style_1" name="style" checked>
+            <label for="csquare" class="form-check-label">Vertical, single line</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input type="radio" class="form-check-input" id="vb" value="style_2" name="style">
+            <label for="csquare" class="form-check-label">Vertical, block</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input type="radio" class="form-check-input" id="hs" value="style_4" name="style">
+            <label for="round" class="form-check-label">Horizontal, single line</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input type="radio" class="form-check-input" id="hb" value="style_5" name="style">
+            <label for="cround" class="form-check-label">Horizontal, block</label>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="font" class="col-form-label col-sm-4">Font Style:</label>
+            <select class="form-control custom-select col-sm-2" id="font" name="font">
+              <!-- Make sure to change scope and add one-word explanation -->
+              <option value="gyoshotai">gyoshotai 行書体</option>
+              <option value="inosotai">inosotai 印相体</option>
+              <option value="kaishotai">kaishotai楷書体</option>
+              <option value="kointai">kointai古印体</option>
+              <option value="reishotai">reishotai草書教漢</option>
+              <option value="soushotai">soushotai隷書体</option>
+              <option value="tenshotai">tenshotai 篆書体</option>
+            </select>
+        </div>
+        <div class="form-group row">
+          <label for="page" class="col-form-label col-sm-4">Signature Page: </label>
+          <input type="number" class="form-control col-sm-2" id="page" name="page" placeholder="Page No." accept=".pdf" min="1" required>
+        </div>
+        <div class="form-group row">
+          <label for="file" class="col-form-label col-sm-4">Select Document: </label>
+          <input type="file" style="padding: 0" class="form-control-file col-sm-5" id="file" name="file" accept=".pdf" required>
+        </div>
+      </div>
+      <div id="post_upload" style="display:none;">
+        <p>Please drag out and select the area on the page where you would like your seal to be applied.<br /><b><u>*Note</u></b>: This service assumes that your document is portrait-oriented and A4. Other dimensions may lead to placement errors.</p>
+        <canvas style="border:1px solid #000000;" width="595" height="842" id="pgCanvas"></canvas><br>
+        <span><button id="area" class="btn btn-tw btn-outline-secondary">Select Area</button><button id="submit1" style="margin-left: 10px;" class="btn btn-tw btn-danger" disabled>Submit</button></span>
+      </div>
+    </form>
+  </div>
+  <br />
+</main><!-- /.container -->
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.5.207/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.5.207/pdf.worker.entry.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.5.207/pdf.worker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.5.207/pdf_viewer.min.css"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <!--script src="../static/js/script.js"></script-->
+  </body>
+</html>
