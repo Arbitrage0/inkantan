@@ -87,7 +87,7 @@ document.getElementById("area").addEventListener("click", function(e) {
     }
 })
 
-document.getElementById("submit1").addEventListener("click", function(e) {
-    e.target.disabled=true;
-    document.getElementById("formdata").submit();
+document.getElementById("formdata").addEventListener("submit", function(e) {
+    document.getElementById("submit1").disabled=true;
+    e.target.submit();
 })
