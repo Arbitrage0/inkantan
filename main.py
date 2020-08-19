@@ -58,13 +58,12 @@ def getHankoImage(text, shape, style, font):
     return ["Message: Dependency Error [Check Console]", p.text]
 
 def signPDF(docdata, page, email, name, shape, style, font, region, x1,y1,x2,y2):
-  _fr, fname = tempfile.mkstemp(".pdf")
   try:
     res = getHankoImage(name, shape, style, font)
     if "Message" in res[0]: 
       return res
     else: 
-      pass
+      _fr, fname = tempfile.mkstemp(".pdf")
 
     one_day = datetime.timedelta(1, 0, 0)
     private_key = rsa.generate_private_key(
