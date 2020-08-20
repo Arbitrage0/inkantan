@@ -79,6 +79,7 @@ python3 main.py
 
 * Cannot be used for PDFs with existing structural malformations/anomalies
 * PDFs with existing signatures will have those sigs invalidated due to manipulation of PDF data (a solution is currently being worked on because ```PIL``` with ```endesive``` as an alternative is quite temperamental).
+* Hanko Generator has inconsistent treatment of CJK characters, which may not show up on the final seals (or possibly lead to 500 errors). I suspect this mainly pertains to simplified Chinese characters, but it is a [fool's errand to try to validate CJK name input by way of Regex](https://salesforce.stackexchange.com/questions/127565/regular-expression-to-find-chinese-characters). Use with caution, I guess? 
 
 ## Authors
 
