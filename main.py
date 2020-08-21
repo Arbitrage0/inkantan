@@ -27,8 +27,7 @@ import fitz
 
 app = Flask('app')
 
-def getHankoImage(text, shape, style, font):
-  _fq, imagepath = tempfile.mkstemp(".png")
+def getHankoImage(text, shape, style, font, origin=None):
   site = "https://www.hankogenerator.com"
   url = site + "/getimage/"
 
@@ -46,16 +45,21 @@ def getHankoImage(text, shape, style, font):
 
   p = s.post(url, data=data, headers=headers)
 
-  if p.status_code == 200: 
-    imgdata = base64.b64decode(p.text)
-    with open(imagepath, 'wb') as f:
-        f.write(imgdata)
-    return [imagepath, _fq]
-  else:
-    os.close(_fq)
-    os.remove(imagepath)
-    app.logger.error("Issue with website scraping: " + p.text)
-    return ["Message: Dependency Error [Check Console]", p.text]
+  if origin != None: 
+    if p.status_code == 200: 
+      return p.text
+    else: 
+      return "Error: " + p.text
+  else: 
+    if p.status_code == 200: 
+      _fq, imagepath = tempfile.mkstemp(".png")
+      imgdata = base64.b64decode(p.text)
+      with open(imagepath, 'wb') as f:
+          f.write(imgdata)
+      return [imagepath, _fq]
+    else:
+      app.logger.error("Issue with website scraping: " + p.text)
+      return ["Message: Dependency Error [Check Console]", p.text]
 
 def signPDF(docdata, page, email, name, shape, style, font, region, x1,y1,x2,y2):
   try:
@@ -165,6 +169,11 @@ def errHandler(e, path, descriptor):
 @app.route('/')
 def home():
   return render_template("index.html")
+
+@app.route('/test', methods=["POST"])
+def test():
+  content = request.json
+  return getHankoImage(content['name'], content['shape'], content['style'], content['font'], "self")
 
 @app.route('/sign', methods=["POST"])
 def sign():
