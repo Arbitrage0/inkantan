@@ -87,6 +87,37 @@ document.getElementById("area").addEventListener("click", function(e) {
     }
 })
 
+document.getElementById("checkimg").addEventListener("click", async function(e) {
+    e.target.disabled = true;
+    e.target.innerHTML = "Generating Preview..."
+    var data = {
+        name: document.getElementById("name").value,
+        shape: document.querySelector('input[name="shape"]:checked').value,
+        style: document.querySelector('input[name="style"]:checked').value,
+        font: document.getElementById("font").options[document.getElementById("font").selectedIndex].value
+    }
+    await fetch("/test", {
+        method: "POST", 
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+      .then(response => response.text())
+      .then((res) => {
+        e.target.disabled = false; 
+        e.target.innerHTML = "Preview Seal"
+        if (!res.includes("Error")) {
+            document.getElementById("errortag").style.display = "none";
+            document.getElementById("endpoint").width = "100";
+            document.getElementById("endpoint").src="data:img/png;base64," + res;
+        } else {
+            console.log(res);
+            document.getElementById("errortag").style.display = "";
+        }
+      })
+  })
+
 document.getElementById("formdata").addEventListener("submit", function(e) {
     document.getElementById("submit1").disabled=true;
     e.target.submit();
