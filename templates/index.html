@@ -51,7 +51,10 @@
     <br /><br/><hr/>
   </div>
   <div id="forma" style="display:none">
-    <h3>Upload and Sign:</h3>
+    <div class="row">
+      <h3 class="col-sm-4">Upload and Sign:</h3>
+      <img id="endpoint"></img>
+    </div>
     <br>
     <form id="formdata" enctype="multipart/form-data" method="POST" action="/sign">
       <div class="form-group">
@@ -114,6 +117,8 @@
               <option value="soushotai">soushotai隷書体</option>
               <option value="tenshotai">tenshotai 篆書体</option>
             </select>
+          <button id="checkimg" type="button" class="btn btn-tw btn-outline-secondary" style="margin-left: 10px;">Preview Seal</button>
+          <p id="errortag" style="margin-left: 10px; color:red; display: none;">Error generating image</p>
         </div>
         <div class="form-group row">
           <label for="page" class="col-form-label col-sm-4">Signature Page: </label>
@@ -142,6 +147,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.5.207/pdf.worker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.5.207/pdf_viewer.min.css"></script>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-    <!--script src="../static/js/script.js"></script-->
   </body>
 </html>
