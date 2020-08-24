@@ -74,15 +74,15 @@
         <div class="form-group row">
           <p class="col-form-label col-sm-4">Hanko Purpose/Shape: </p>
           <div class="form-check form-check-inline">
-            <input type="radio" class="form-check-input" id="pround" value="round" name="shape" checked>
+            <input type="radio" class="form-check-input" id="pround" onchange="showRotationInput(this)" value="round" name="shape" checked>
             <label for="round" class="form-check-label">Personal Use / Round</label>
           </div>
           <div class="form-check form-check-inline">
-            <input type="radio" class="form-check-input" id="cround" value="round" name="shape">
+            <input type="radio" class="form-check-input" id="cround" onchange="showRotationInput(this)" value="round" name="shape">
             <label for="cround" class="form-check-label">Corporate Use / Round</label>
           </div>
           <div class="form-check form-check-inline">
-            <input type="radio" class="form-check-input" id="csquare" value="square" name="shape">
+            <input type="radio" class="form-check-input" id="csquare" onchange="showRotationInput(this)" value="square" name="shape">
             <label for="csquare" class="form-check-label">Corporate Use / Square</label>
           </div>
         </div>
@@ -105,6 +105,12 @@
             <label for="cround" class="form-check-label">Horizontal, block</label>
           </div>
         </div>
+        <div id="rgroup">
+          <div class="form-group row">
+            <label for="rotation" class="col-form-label col-sm-4">Seal Rotation: </label>
+            <input type="number" class="form-control col-sm-2" id="rotation" name="rotation" placeholder="20°" step="1">
+          </div>
+        </div>
         <div class="form-group row">
           <label for="font" class="col-form-label col-sm-4">Font Style:</label>
             <select class="form-control custom-select col-sm-2" id="font" name="font">
@@ -122,7 +128,7 @@
         </div>
         <div class="form-group row">
           <label for="page" class="col-form-label col-sm-4">Signature Page: </label>
-          <input type="number" class="form-control col-sm-2" id="page" name="page" placeholder="Page No." accept=".pdf" min="1" required>
+          <input type="number" class="form-control col-sm-2" id="page" name="page" placeholder="Page No." min="1" step="1" required>
         </div>
         <div class="form-group row">
           <label for="file" class="col-form-label col-sm-4">Select Document: </label>
