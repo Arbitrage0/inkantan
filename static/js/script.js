@@ -31,6 +31,7 @@ var drag = false;
 var c;
 var ctx;
 var src;
+var vh;
 function loadCanvas(fileuri) {
     console.log(fileuri);
     c = document.getElementById("pgCanvas");
@@ -38,9 +39,9 @@ function loadCanvas(fileuri) {
     ctx = c.getContext("2d");
     pdfjsLib.getDocument({url: fileuri}).promise.then(function(doc) {
         doc.getPage(parseInt(document.getElementById("page").value)).then(function(page) {
-            var scale_required = c.width / page.getViewport({scale: 1}).width;
-            var viewport = page.getViewport({scale: scale_required});
-            c.height = viewport.height;
+            var viewport = page.getViewport({scale: 1});
+            vh = viewport.height;
+            c.height = vh;
             c.width = viewport.width;
             var renderContext = {
             canvasContext: ctx,
@@ -85,6 +86,7 @@ document.getElementById("area").addEventListener("click", function(e) {
     e.target.innerHTML="Selected!";
     document.getElementById("submit1").disabled=false;
     var min_side = Math.min(rect.w, rect.h); //square-ifying the seal area
+    document.getElementById("ycom").value = vh;
     rect.w = min_side; rect.h = min_side;
     rect.x2 = rect.x1 + rect.w;
     rect.y2 = rect.y1 + rect.h;
