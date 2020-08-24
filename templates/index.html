@@ -63,6 +63,7 @@
         <input type="hidden" id="x2" name="x2">
         <input type="hidden" id="y1" name="y1">
         <input type="hidden" id="y2" name="y2">
+        <input type="hidden" id="ycom" name="ycom">
         <div class="form-group row">
           <label for="name" class="col-form-label col-sm-4">Name (Kanji/Hiragana/Katakana only): </label>
           <input type="text" class="form-control col-sm-2" id="name" name="name" placeholder="宮崎駿" required>
@@ -137,7 +138,7 @@
       </div>
       <div id="post_upload" style="display:none;">
         <p>Please drag out and select the area on the page where you would like your seal to be applied.<br /><b><u>*Note</u></b>: This service assumes that your document is portrait-oriented and A4. Other dimensions may lead to placement errors.</p>
-        <canvas style="border:1px solid #000000;" width="595" height="842" id="pgCanvas"></canvas><br>
+        <canvas style="border:1px solid #000000;" id="pgCanvas"></canvas><br>
         <span><button id="area" class="btn btn-tw btn-outline-secondary">Select Area</button><button id="submit1" type="submit" style="margin-left: 10px;" class="btn btn-tw btn-danger" disabled>Submit</button></span>
       </div>
     </form>
