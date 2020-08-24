@@ -18,6 +18,14 @@ document.getElementById("file").addEventListener('change', function() {
     });
 })
 
+function showRotationInput(el) {
+    if (el.value == "square") {
+        document.getElementById("rgroup").style.display = "none";
+    } else {
+        document.getElementById("rgroup").style.display = "";
+    }
+}
+
 var rect = {};
 var drag = false;
 var c;
@@ -109,6 +117,14 @@ document.getElementById("checkimg").addEventListener("click", async function(e) 
         e.target.innerHTML = "Preview Seal"
         if (!res.includes("Error")) {
             document.getElementById("errortag").style.display = "none";
+            if (document.getElementById("rotation").value != "" && document.querySelector('input[name="shape"]:checked').value == "round") {
+                var rotation_input = document.getElementById("rotation").value;
+                var negative_compensator = (rotation_input < 0) ? "" : "-";
+                var angle = (rotation_input < 0) ? rotation_input.toString().substring(1) : rotation_input.toString();
+                document.getElementById("endpoint").style.transform = "rotate(" + negative_compensator + angle + "deg)";
+            } else {
+                document.getElementById("endpoint").style.transform = "";
+            }
             document.getElementById("endpoint").width = "100";
             document.getElementById("endpoint").src="data:img/png;base64," + res;
         } else {
