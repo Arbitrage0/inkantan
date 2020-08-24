@@ -35,7 +35,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-The PDF-manipulation python libraries that the project makes use of (i.e. ```fitz``` and ```endesive```) both require the following package to be installed:
+The PDF-manipulation python library that the project makes use of (i.e. ```endesive```) requires the following package to be installed:
 
 ```
 apt install swig 
@@ -70,7 +70,7 @@ python3 main.py
 * [Flask](https://flask.palletsprojects.com/en/1.1.x/) - The web framework used
 * [Cryptography](https://cryptography.io/en/latest/) - For creating digital signatures, keys and certificates
 * [Endesive](https://github.com/m32/endesive) - For digitally signing PDFs
-* [Fitz](https://pymupdf.readthedocs.io/en/latest/intro.html) - For PDF data manipulation (image insertion)
+* [Pillow](https://pillow.readthedocs.io/en/stable/) - For Image data manipulation
 * [PDF.js](https://mozilla.github.io/pdf.js/) - For web PDF rendering and interaction
 * [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) - For HTML web scraping
 * [Requests](https://requests.readthedocs.io/en/master/) - For HTTP web requests and session management
@@ -78,7 +78,7 @@ python3 main.py
 ## Known Issues
 
 * Cannot be used for PDFs with existing structural malformations/anomalies
-* PDFs with existing signatures will have those sigs invalidated due to manipulation of PDF data (a solution is currently being worked on because ```PIL``` with ```endesive``` as an alternative is quite temperamental).
+* <strike>PDFs with existing signatures will have those sigs invalidated due to manipulation of PDF data (a solution is currently being worked on because ```PIL``` with ```endesive``` as an alternative is quite temperamental).</strike> Issue has been resolved. 
 * Hanko Generator has inconsistent treatment of CJK characters, which may not show up on the final seals (or possibly lead to 500 errors). I suspect this mainly pertains to simplified Chinese characters, but it is a [fool's errand to try to validate CJK name input by way of Regex](https://salesforce.stackexchange.com/questions/127565/regular-expression-to-find-chinese-characters). Use with caution, I guess? 
 
 ## Authors
