@@ -120,7 +120,7 @@ def signPDF(docdata, page, email, name, shape, style, font, region, x1,y1,x2,y2,
         "sigbutton": True,
         "sigfield": "Signature1",
         "sigandcertify": True,
-        "signaturebox": (max(x1, x2),842-(min(y1,y2)),min(x1,x2),842-max(y1,y2)), #y coordinate compensation
+        "signaturebox": (max(x1,x2),(max(y1,y2)),min(x1,x2),min(y1,y2)), 
         "signature_img": res[0],
         "contact": email,
         "location": region,
@@ -175,10 +175,11 @@ def sign():
     
     name = request.form['name']
     email = request.form['email']
+    y_compensator = int(request.form['ycom'])
     x1 = int(request.form['x1'])
-    y1 = int(request.form['y1'])
+    y1 = y_compensator - int(request.form['y1'])
     x2 = int(request.form['x2'])
-    y2 = int(request.form['y2'])
+    y2 = y_compensator - int(request.form['y2'])
     shape = request.form['shape']
     style = request.form['style']
     font = request.form['font']
