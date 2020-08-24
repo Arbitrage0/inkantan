@@ -23,11 +23,11 @@ from cryptography.hazmat.primitives.serialization import pkcs12
 
 #utils for pdf signing / manipulation
 from endesive.pdf import cms
-import fitz
+from PIL import Image, ImageOps
 
 app = Flask('app')
 
-def getHankoImage(text, shape, style, font, origin=None):
+def getHankoImage(text, shape, style, font, origin=None, rotation=0):
   site = "https://www.hankogenerator.com"
   url = site + "/getimage/"
 
@@ -56,14 +56,21 @@ def getHankoImage(text, shape, style, font, origin=None):
       imgdata = base64.b64decode(p.text)
       with open(imagepath, 'wb') as f:
           f.write(imgdata)
+      img = Image.open(imagepath).rotate(rotation+180) #endesive rotation needs compensation
+      if shape == "square":
+        side = img.size[0]
+        ImageOps.expand(img, border=side//20, fill="red").save(imagepath) #borders for square seals need enhancement
+      else:
+        img.save(imagepath)
+      img.close()
       return [imagepath, _fq]
     else:
       app.logger.error("Issue with website scraping: " + p.text)
       return ["Message: Dependency Error [Check Console]", p.text]
 
-def signPDF(docdata, page, email, name, shape, style, font, region, x1,y1,x2,y2):
+def signPDF(docdata, page, email, name, shape, style, font, region, x1,y1,x2,y2, rotation):
   try:
-    res = getHankoImage(name, shape, style, font)
+    res = getHankoImage(name, shape, style, font, rotation=rotation)
     if "Message" in res[0]: 
       return res
     else: 
@@ -113,8 +120,8 @@ def signPDF(docdata, page, email, name, shape, style, font, region, x1,y1,x2,y2)
         "sigbutton": True,
         "sigfield": "Signature1",
         "sigandcertify": True,
-        "signaturebox": (0,0,0,0), #(x1, y1, x2, y2),
-        "signature": "Contract with Hanko seal applied",
+        "signaturebox": (max(x1, x2),842-(min(y1,y2)),min(x1,x2),842-max(y1,y2)), #y coordinate compensation
+        "signature_img": res[0],
         "contact": email,
         "location": region,
         "signingdate": date,
@@ -124,19 +131,6 @@ def signPDF(docdata, page, email, name, shape, style, font, region, x1,y1,x2,y2)
 
     with open(fname, 'wb') as fx: 
       fx.write(docdata)
-    img_rect = fitz.Rect(min(x1,x2), min(y1,y2), max(x1,x2), max(y1,y2))
-    document = fitz.open(fname)
-    pg = document[int(page)-1]
-    pg.insertImage(img_rect, filename=res[0])
-    if document.can_save_incrementally():
-      document.save(fname, garbage=0, deflate=True, incremental=True, encryption=0)
-      document.close()
-    else:
-      os.close(res[1])
-      os.remove(res[0])
-      os.close(_fr)
-      os.remove(fname)
-      return ["Fitz Issue: Cannot incrementally save document", "Continuing may lead to loss of data"]
 
     datau = open(fname, "rb").read()
     try:
@@ -190,10 +184,14 @@ def sign():
     font = request.form['font']
     region = request.form['region']
     page = request.form['page']
+    if request.form['rotation'] in ["", None] or request.form['shape'] != "round": 
+      rotation = 0
+    else:
+      rotation = int(request.form['rotation'])
     data = request.files.get('file', None)
     
     if data.filename.rsplit('.', 1)[1].lower() == "pdf":
-      api_response = signPDF(data.read(), page, email, name, shape, style, font, region, x1, y1, x2, y2)
+      api_response = signPDF(data.read(), page, email, name, shape, style, font, region, x1, y1, x2, y2, rotation)
       if type(api_response) == list:
         return render_template("error.html", e=api_response[0], c=api_response[1])
       elif api_response == None:
