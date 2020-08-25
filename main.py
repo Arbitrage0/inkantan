@@ -175,7 +175,7 @@ def sign():
     
     name = request.form['name']
     email = request.form['email']
-    y_compensator = int(request.form['ycom'])
+    y_compensator = round(float(request.form['ycom']))
     x1 = int(request.form['x1'])
     y1 = y_compensator - int(request.form['y1'])
     x2 = int(request.form['x2'])
