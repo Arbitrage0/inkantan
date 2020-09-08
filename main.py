@@ -112,6 +112,7 @@ def signPDF(docdata, page, email, name, shape, style, font, region, x1,y1,x2,y2,
 
     date = datetime.datetime.utcnow() - datetime.timedelta(hours=12)
     date = date.strftime("D:%Y%m%d%H%M%S+00'00'")
+    tspurl = "http://public-qlts.certum.pl/qts-17"
     dct = {
         "aligned": 0,
         "sigflags": 1,
@@ -134,7 +135,7 @@ def signPDF(docdata, page, email, name, shape, style, font, region, x1,y1,x2,y2,
 
     datau = open(fname, "rb").read()
     try:
-      datas = cms.sign(datau, dct, y[0], y[1], y[2], "sha256")
+      datas = cms.sign(datau, dct, y[0], y[1], y[2], "sha256", timestampurl=tspurl)
     except Exception as x:
       return errHandler(x, [res[0], fname], [res[1], _fr])
       
